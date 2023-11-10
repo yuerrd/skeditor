@@ -23,6 +23,7 @@ const DebugRenderCost = false;
 
 class PageState {
   selectedLayerView?: SkyBaseLayerView;
+  // 鼠标悬停的视图
   hoverLayerView?: SkyBaseLayerView;
 
   selectionChange = new Subject();
@@ -132,10 +133,13 @@ export class SkyView extends Disposable {
     canvasEl.style.display = 'block';
     this.grContext = sk.CanvasKit.MakeGrContext(sk.CanvasKit.GetWebGLContext(canvasEl));
 
+    // WebGl 丢失的时候，重新创建
     canvasEl.addEventListener('webglcontextlost', () => {
       console.log('webglcontextlost');
       this.forceRestoreWebglContext();
     });
+
+    // WebGL重新恢复的时候触发
     canvasEl.addEventListener('webglcontextrestored', () => {
       console.log('webglcontextrestored');
     });
@@ -304,11 +308,11 @@ export class SkyView extends Disposable {
   // 重新绘制
   render() {
     if (!this.dirty) return;
-
     this.createSkSurfaceAndCanvas();
     if (!this.skSurface) return;
     this.skCanvas.clear(sk.CanvasKit.TRANSPARENT);
     if (this.pageView) {
+      console.log('pageView', this.pageView);
       const start = Date.now();
       this.skCanvas.save();
       this.skCanvas.scale(this.dpi, this.dpi);

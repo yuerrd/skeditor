@@ -27,10 +27,14 @@ export class ZoomState implements IZoomListener {
     return this.scale$.value;
   }
 
-  // 应用了 position、scale 后相当于这个 matrix
+  /**
+   * 获取当前的 matrix(矩阵)
+   */
   get matrix() {
     return sk.CanvasKit.Matrix.multiply(
+      // 平移矩阵
       sk.CanvasKit.Matrix.translated(this.position.x, this.position.y),
+      // 缩放矩阵
       sk.CanvasKit.Matrix.scaled(this.scale, this.scale)
     );
   }
@@ -43,7 +47,13 @@ export class ZoomState implements IZoomListener {
     this._position$.next(this.position.minus(offset));
   }
 
-  // Todo 这个应该是有点问题的，pageView 现在不是铺满了全屏幕的了
+  /**
+   * Todo 这个应该是有点问题的，pageView 现在不是铺满了全屏幕的了
+   * 缩放操作
+   * @param scaleMultiply 缩放因子
+   * @param center  缩放的中心点
+   * @returns 
+   */
   onScale(scaleMultiply: number, center: Point) {
     let newScale = this.scale * scaleMultiply;
     newScale = Math.min(Math.max(newScale, this._minScale), MAX_SCALE);

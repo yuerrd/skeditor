@@ -66,6 +66,8 @@ export class SkyPageView extends SkyBaseGroupView<SkyPage> {
   }
 
   updateTransform() {
+    // 打印调用栈
+    console.log(new Error().stack);
     const { position, scale } = this.zoomState;
     this.transform.position.set(position.x, position.y);
     this.transform.scale.set(scale, scale);

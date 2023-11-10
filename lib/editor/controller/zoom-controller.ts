@@ -5,9 +5,16 @@ import { Point } from '../base/point';
 import { fromDragEvent } from '../util/drag';
 
 export interface IZoomListener {
-  // set final scale
+  /**
+   * 缩放操作结束后，设置最终的 scale
+   * @param scaleMultiply 缩放的倍数
+   * @param center 缩放的中心点
+   */
   onScale(scaleMultiply: number, center: Point);
-  // emit offset
+  /**
+   * 平移操作结束后，设置最终的 offset
+   * @param delta 平移的偏移量
+   */
   onOffset(delta: Point);
 }
 export class ZoomController extends Disposable {
@@ -64,8 +71,10 @@ export class ZoomController extends Disposable {
     const e = _e as WheelEvent;
 
     e.preventDefault();
+    // 按下了 Ctrl 键（或者 Mac 中的 Command 键）
     if (e.ctrlKey || e.metaKey) {
       const scaleMultiply = (100 - 1.5 * this.getScaleDelta(e)) / 100;
+      console.log('scaleMultiply', scaleMultiply);
       this.service.onScale(scaleMultiply, new Point(e.offsetX - this.offset.x, e.offsetY - this.offset.x));
     } else {
       this.service.onOffset(this.getOffsetDelta(e));

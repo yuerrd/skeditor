@@ -371,6 +371,7 @@ export abstract class SkyBaseLayerView<T extends SkyBaseLayer = SkyBaseLayer> ex
    * 对于 Group 和 instance 都使用这种方式， 但继承的基类不同。所以抽离出一个方法。
    */
   commonLayoutSelf() {
+    console.log('common layout self', this.constructor.name, this.model.name);
     this.scaledFrame = undefined;
     const info = this.calcInstanceChildScale();
     if (!info) return;
